@@ -1,4 +1,5 @@
 from great_tables import GT, html
+import matplotlib.pyplot as plt
 
 
 def beau_tableau(df, titre):
@@ -30,3 +31,63 @@ def beau_tableau(df, titre):
         .cols_align(align="center")
     )
     return tableau
+
+
+def top_surrepresentation(top_n, nom_candidat, donnees):
+    """
+    Affiche les principales surreprésentations
+    (en valeur absolue) par département
+
+    Parameters
+    ----------
+    n: int
+    Représente les n premières
+    surreprésentations
+
+    candidat : str
+    Nom du candidat dont on veut
+    les surreprésentations
+
+    donnees : dataframe
+    Données que l'on souhaite étudier
+    """
+    # Recherche index du candidat
+    index_cand = donnees['candidat'].str.contains(nom_candidat, case=False, na=False)
+
+    # Copie avec seulement le candidat pour ne pas modifier le dataframe
+    copie_score = donnees[index_cand].copy()
+    # Index du top n
+    top_abs = (
+        copie_score['surrepresentation (%)'].abs().nlargest(5)
+        .index
+        )
+    # Sélection de ces n lignes et tri (plus haut vers plus bat)
+    top_deviations = (
+        copie_score
+        .loc[top_abs]
+        .sort_values(by='surrepresentation (%)', ascending=False)
+        )
+    # Graphique
+    plt.barh("code_departement", "surrepresentation (%)", data=top_deviations)
+    plt.axvline(x=0)
+    plt.xlabel('Surreprésentation')
+    plt.ylabel('Département')
+    plt.title(f'Top {top_n} des surreprésentations de {nom_candidat}')
+    plt.show()
+
+
+def score_candidat(candidat, donnees):
+    """
+    Isole le score du candidat
+
+    Parameters
+    ----------
+    candidat : str
+    Prenom NOM du candidat dont on veut
+    les surreprésentations
+
+    donnees : dataframe
+    Données que l'on souhaite étudier
+    """
+    copie_score = donnees.copy()
+    return copie_score[copie_score["candidat"] == candidat]

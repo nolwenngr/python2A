@@ -2,6 +2,7 @@ from great_tables import GT, html
 import matplotlib.pyplot as plt
 
 
+# Question 3
 def beau_tableau(df, titre):
     """
     Transforme une base de données en beau tableau.
@@ -33,6 +34,7 @@ def beau_tableau(df, titre):
     return tableau
 
 
+# Question 7
 def top_surrepresentation(top_n, nom_candidat, donnees):
     """
     Affiche les principales surreprésentations
@@ -76,6 +78,7 @@ def top_surrepresentation(top_n, nom_candidat, donnees):
     plt.show()
 
 
+# Question 8
 def score_candidat(candidat, donnees):
     """
     Isole le score du candidat
